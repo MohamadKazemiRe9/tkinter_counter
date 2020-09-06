@@ -1,0 +1,86 @@
+import tkinter as tk
+oneperhoundred = 0
+sec = 0
+state = ""
+
+def Start(label):
+    global state
+    state = "start"
+    start["state"] = "disabled"
+    stop['stat'] = "normal"
+    reset["state"] ="normal"
+    def count():
+        if state =="start":
+            global oneperhoundred
+            global sec
+            if(oneperhoundred==100):
+                oneperhoundred=0
+                sec += 1
+            if(oneperhoundred<10):oneperhoundred="0"+str(oneperhoundred)
+            label["text"] = oneperhoundred
+            labelsec["text"] = str(sec)+":"
+            label.after(10, count)
+            oneperhoundred = int(oneperhoundred) 
+            oneperhoundred += 1
+    count()
+
+def Reset():
+    global state
+    global oneperhoundred
+    global sec
+    if state == "start" or state=="stop":
+        state = "reset"
+        sec = 0
+        oneperhoundred = 0
+        label["text"] = "Ready..."
+        labelsec["text"] = ""
+        start["state"] = "normal"
+        stop["text"] = "stop"
+        stop["state"] = "disabled"
+        reset["state"] ="disabled"
+        
+        
+def Stop(label):
+    global state
+    if state == "start":
+        state = "stop"
+        start["state"] = "disabled"
+        stop["text"] = "Continue"
+    elif (state=="stop"):
+        state = "start"
+        Start(label)
+        stop["text"] = "stop"
+
+
+
+window = tk.Tk()
+window.title("timer") 
+window.minsize(width=250, height=200)
+
+showframe = tk.Frame(window)
+
+label = tk.Label(showframe,text="ready...",font="None 30 bold")
+labelsec = tk.Label(showframe,text="",font="None 30 bold")
+
+
+label.pack(side="right")
+labelsec.pack(side="right")
+
+showframe.pack(anchor='center')
+
+fr = tk.Frame(window)
+
+start = tk.Button(fr,text='Start', width=8, height=2, font="None 10 bold"
+    ,command =lambda:Start(label)) 
+reset = tk.Button(fr,text='Reset', width=8,height=2, font="None 10 bold"
+    ,command =lambda:Reset()) 
+stop = tk.Button(fr,text='Stop',width=8,state='disabled',height=2, font="None 10 bold"
+    ,command=lambda:Stop(label)) 
+
+fr.pack(anchor='center',pady=20,padx=4)
+
+start.pack(side="right") 
+stop.pack(side="left") 
+reset.pack(side="right") 
+
+window.mainloop()
